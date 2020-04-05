@@ -17,7 +17,7 @@ def cb(temp, pressure):
 	my_msg.temp = temp.data
 	my_msg.pressure = pressure.data
 	pub.publish(my_msg)
-
+	rospy.loginfo(my_msg)
 def main():
 	rospy.init_node("test_my_message_node", anonymous = False)
 	# Message

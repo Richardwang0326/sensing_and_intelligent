@@ -18,7 +18,9 @@ def callback(msg):
 	#	Complete your callback function here	     #
 	#						     #
 	############### Student Implimentation ###############
-
+	mmhg=msg.data/1.33
+	rospy.loginfo("Pressure: %.2f (mmHg)",mmhg)
+	pub.publish(mmhg)
 # Intialize the node, publisher and subscriber
 def main():
 	rospy.init_node("convert_pressure_unit_node", anonymous = False)
@@ -34,6 +36,7 @@ def main():
 	#               Subscribe to which topic             #
         #                                                    #
 	############### Student Implimentation ###############
+	sub= rospy.Subscriber("/sensor/pressure",Float64,callback, queue_size=10)
 	rospy.spin()
 
 if __name__ == "__main__":
