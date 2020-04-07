@@ -21,6 +21,10 @@ bool id_in_range(int id1, int id2){
   //                                                         //
   //                                                         //
   ************************************************************/
+  if((id1>=0 && id1<=15) && (id2>=0 && id2<=15))
+  	result = true;
+  else 
+	result = false;
   return result;
 }
 
@@ -34,6 +38,11 @@ double calculateDistance(tf::Transform transform){
   //                                                         //
   //                                                         //
   ************************************************************/
+  double x,y,z;
+  x = transform.getOrigin().x();
+  y = transform.getOrigin().y();
+  z = transform.getOrigin().z();
+  dist = sqrt(x * x + y * y + z * z);
   return dist;
 }
 
@@ -61,7 +70,10 @@ bool serviceCb(tutorial::assignment::Request  &req,
   	 //                Student Implementation                   //
  	 //                                                         //
  	 //                                                         //
- 	 ************************************************************/}
+ 	 ************************************************************/
+  	 listener.lookupTransform(tag1_str, tag2_str, ros::Time(0), transform);
+	 }
+
       else{
         res.result = "Times out.";
         return 1;
