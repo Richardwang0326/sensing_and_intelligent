@@ -42,8 +42,8 @@ cx = msg.P[2]
 cy = msg.P[6]
 
 def main():
-    useHSV   = False
-    useDepth = False
+    useHSV   = True
+    useDepth = True
     if not useHSV:
         # Subscribe to RGB image
         rospy.Subscriber('/camera/color/image_raw', Image, rosImageVizCallback)
@@ -95,8 +95,8 @@ def HSVObjectDetection(cv_image, toPrint = True):
     hsv_image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2HSV)
 
     # define range of red color in HSV
-    lower_red = np.array([170,50,50])
-    upper_red = np.array([180,255,255])
+    lower_red = np.array([0,50,50])
+    upper_red = np.array([10,255,255])
 
     # Threshold the HSV image to get only red colors
     mask = cv2.inRange(hsv_image, lower_red, upper_red)
@@ -115,9 +115,9 @@ def HSVObjectDetection(cv_image, toPrint = True):
     return contours, mask_eroded_dilated
 
 def rosRGBDCallBack(rgb_data, depth_data):
-    draw_contours = False
-    detect_shape = False
-    calculate_size = False
+    draw_contours = True
+    detect_shape = True
+    calculate_size = True
     try:
         cv_image = cv_bridge.imgmsg_to_cv2(rgb_data, "bgr8")
         cv_depthimage = cv_bridge.imgmsg_to_cv2(depth_data, "32FC1")
@@ -145,7 +145,7 @@ def rosRGBDCallBack(rgb_data, depth_data):
             # object contour in RVIZ
             #
             #
-            # cv2.drawContours(??, ??, ??, ??, ??)
+            cv2.drawContours(cv_image, contours, -1, (255,255,0), 3)
             ###################################################################
 
             if detect_shape:
@@ -157,7 +157,14 @@ def rosRGBDCallBack(rgb_data, depth_data):
                 #
                 # obj_shape = ?? #options: "triangle", "square", "circle"
                 #
-                #
+                epsilon = 0.04 * cv2.arcLength(cnt, True)
+                app = cv2.approxPolyDP(cnt, epsilon, True)
+                if (len(app) == 3):
+                    obj_shape = "triangle"
+                elif (len(app) == 4):
+                    obj_shape = "square"
+                else:
+                    obj_shape = "circle"
                 #
                 # Hint: Approximate the contour as polygon (cv2.approxPolyDP)
                 ###############################################################
@@ -187,7 +194,9 @@ def rosRGBDCallBack(rgb_data, depth_data):
                 # area. if so, please ignore and comment the line 193 - 218,
                 # and write your code there.
                 #
-                #
+                #epsilon = 0.07 *  cv2.arcLength(cnt, True)
+                #vtx_list = cv2.approxPolyDP(cnt, 15, True)
+                vtx_list = app
                 # vtx_list = ?? #hint: vtx_list is similar to cnt
                 ##################################################
                 if obj_shape == "triangle":
@@ -246,7 +255,6 @@ def get_side_length(cnt_vtx_list, depthimage):
             vtx_3d_list.append(v1)
         else:
             vtx_3d_list.append(None)
-
     side_len_list = [] #A list which stores side lengths of a polygon
     ########################Finish side_len_list###############################
     # Hint: You can access all 3D coordinates of object vertexes from variable
@@ -262,7 +270,12 @@ def get_side_length(cnt_vtx_list, depthimage):
     # side_len = math.sqrt(sum(i**2 for i in vector))
     #
     #
-    #
+    for i in range(len(vtx_3d_list)):
+        #if (vtx_3d_list[i] == None):
+         #   return None
+        #els
+        value = vtx_3d_list[i] - vtx_3d_list[(i+1)%len(vtx_3d_list)]
+        side_len_list.append(math.sqrt(sum(value ** 2)) / 0.92)
     #
     #
     #
@@ -273,7 +286,7 @@ def get_side_length(cnt_vtx_list, depthimage):
         return None
     else:
         print ("Side length: \n" +  str(side_len_list))
-        return sum(side_len_list)/len(side_len_list)
+        return sum(side_len_list)/len(side_len_list)/1000
 
 
 def get_radius(cnt_vtx_list, depthimage):
@@ -315,14 +328,21 @@ def get_radius(cnt_vtx_list, depthimage):
     # side_len = math.sqrt(sum(i**2 for i in vector))
     #
     #
-    #
+
+    for i in range(1,len(vtx_3d_list)):
+     #   if(vtx_3d_list[i]== None):
+     #       return None
+     #   else:
+        value = vtx_3d_list[0] - vtx_3d_list[i]
+        vtx_dis.append(math.sqrt(sum(value ** 2)))
+            
     #
     #
     #
     #
     # vtx_dis = ??
     ###########################################################################
-    return max(vtx_dis)/2
+    return max(vtx_dis)/2/1000
 
 def getXYZ(xp, yp, zc, fx,fy,cx,cy):
     #### Definition:
