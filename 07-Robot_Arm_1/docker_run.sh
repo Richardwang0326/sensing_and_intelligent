@@ -25,10 +25,10 @@ fi
 if [ $# -gt 0 ]; then
     if [[ "$1" == "cuda9" || "$1" == "cuda9.0" ]] ; then
         echo -e "RUN: \"${DOCKER_CMD}\""
-        DOCKER_TAG="v3"
+        DOCKER_TAG="latest"
     elif [[ "$1" == "cuda10" || "$1" == "cuda10.0" ]] ; then
         echo -e "RUN: \"${DOCKER_CMD}\""
-        DOCKER_TAG="v3"
+        DOCKER_TAG="latest"
     elif [ "$1" == "same" ] ; then
         echo -e "RUN: \"docker exec\""
     else
@@ -51,21 +51,21 @@ if [ $# -gt 0 ]; then
         ${DOCKER_CMD} run --name pyrobot --rm -it --network=host --privileged \
             -v /dev:/dev \
             -e DISPLAY=$DISPLAY \
-            -v /etc/localtime:/etc/localtime:ro -v /var/run/docker.sock:/var/run/docker.sock \
-            -v /home/$USER/sis_lab_all_2020:/home/${DOCKER_USER}/sis_lab_all_2020 \
+            -v /etc/localtime:/etc/localtime:ro \
+	    -v /var/run/docker.sock:/var/run/docker.sock \
+            -v /home/$USER/sensing_and_intelligent:/home/${DOCKER_USER}/sensing_and_intelligent \
             -v /tmp/.X11-unix/:/tmp/.X11-unix:rw \
-            -w /home/${DOCKER_USER}/sis_lab_all_2020 \
+            -w /home/${DOCKER_USER}/sensing_and_intelligent \
             --device=/dev/dri \
             --device=/dev/nvhost-ctrl \
-            --device=/dev/nvhost-ctrl-gpu \
             --device=/dev/nvhost-prof-gpu \
             --device=/dev/nvmap \
             --device=/dev/nvhost-gpu \
             --device=/dev/nvhost-as-gpu \
-            -v /usr/lib/nvidia-384:/usr/lib/nvidia-384 \
-            -v /usr/lib32/nvidia-384:/usr/lib32/nvidia-384 \
-            --ipc host \
-            pytorch-jupyter:${DOCKER_TAG} 
+            -v /usr/lib/i386-linux-gnu:/usr/lib/i386-linux-gnu \
+            -v /usr/lib/x86_64-linux-gnu:/usr/lib/x86_86-linux-gnu \
+	    --ipc host \
+            argnctu/sis_lab7:${DOCKER_TAG} 
     fi
 else
     echo "please provide docker tag name."
