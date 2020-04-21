@@ -15,7 +15,15 @@ class ClickPoint:
 
     def click_point_cb(self, msg):
         req = GotoPoseRequest()
-        
+
+        req.position = msg.point / meter_to_mm
+        req.arm = "right"
+
+        if(req.arm == "right"):
+            req.quat = self.right_arm_quat
+        elif(req.arm == "left"):
+            req.quat = self.left_arm_quat
+
 	#--------------------------------------#
 	# please finish this callback function
 	# this function takes the msg for input
