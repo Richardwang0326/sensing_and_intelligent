@@ -128,8 +128,8 @@ include_directories(
 #   src/${PROJECT_NAME}/hand_eye_calibration.cpp
 # )
 
-add_executable(hand_eye_calibration.exe src/hand_eye_calibration.cpp)
-target_link_libraries(hand_eye_calibration.exe ${catkin_LIBRARIES})
+add_executable(hand_eye_calibration src/hand_eye_calibration.cpp)
+target_link_libraries(hand_eye_calibration ${catkin_LIBRARIES})
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
