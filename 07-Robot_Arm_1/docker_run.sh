@@ -62,9 +62,9 @@ if [ $# -gt 0 ]; then
             --device=/dev/nvmap \
             --device=/dev/nvhost-gpu \
             --device=/dev/nvhost-as-gpu \
-            -v /usr/lib/i386-linux-gnu:/usr/lib/i386-linux-gnu \
-            -v /usr/lib/x86_64-linux-gnu:/usr/lib/x86_86-linux-gnu \
-	    --ipc host \
+            -v /usr/lib/nvidia-384:/usr/lib/nvidia-384 \
+            -v /usr/lib32/nvidia-384:/usr/lib32/nvidia-384 \
+            --ipc host \
             argnctu/sis_lab7:${DOCKER_TAG} 
     fi
 else
