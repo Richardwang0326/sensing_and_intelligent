@@ -18,20 +18,6 @@ class ClickPoint:
 
         req.arm = "left"
 
-        current_pose = self.get_pose_srv(req.arm).pose
-        c_position = current_pose[0:3]
-        c_quat = current_pose[3:]
-
-        req.position = [meter_to_mm*msg.point.x, meter_to_mm * c_position[1], meter_to_mm * c_position[2]]
-        req.quat = self.left_arm_quat
-        self.go_pose_plan_srv(req)
-        rospy.sleep(1)
-
-        req.position = [meter_to_mm * msg.point.x, meter_to_mm * msg.point.y, meter_to_mm * msg.point.z+50]
-        req.quat = self.left_arm_quat
-        ret = self.go_pose_plan_srv(req)
-        rospy.sleep(1)
-
         req.position = [meter_to_mm * msg.point.x, meter_to_mm * msg.point.y, meter_to_mm * msg.point.z]
         req.quat = self.left_arm_quat
         ret = self.go_pose_plan_srv(req)
