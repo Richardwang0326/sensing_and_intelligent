@@ -41,7 +41,7 @@ void  cloud_cb (const sensor_msgs::PointCloud2ConstPtr& input)
 
 	// Visualize line lists
 	visualization_msgs::Marker line_list;
-	line_list.header.frame_id = "camera_rgb_optical_frame";
+	line_list.header.frame_id = "camera_color_optical_frame";
 	line_list.header.stamp = ros::Time::now();
 	line_list.ns = "lines";
 	line_list.action = visualization_msgs::Marker::ADD;
