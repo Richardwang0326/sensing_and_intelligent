@@ -15,11 +15,11 @@ class ClickPoint:
 
     def click_point_cb(self, msg):
         req = GotoPoseRequest()
-        
-	req.arm = "left"
-	
-	req.position = [meter_to_mm * msg.point.x, meter_to_mm * msg.point.y, meter_to_mm * msg.point.z]
-	req.quat = self.left_arm_quat
+        req.arm = "left"
+
+        req.position = [meter_to_mm * msg.point.x, meter_to_mm * msg.point.y, meter_to_mm * msg.point.z]
+        req.quat = self.left_arm_quat
+        ret = self.go_pose_plan_srv(req)
 	#--------------------------------------#
 	# please finish this callback function
 	# this function takes the msg for input
@@ -52,7 +52,7 @@ class ClickPoint:
 	# it with the real yumi robot.
 	#--------------------------------------#
 
-        ret = self.go_pose_plan_srv(req)
+        #ret = self.go_pose_plan_srv(req)
 
 
 if __name__ == '__main__':
